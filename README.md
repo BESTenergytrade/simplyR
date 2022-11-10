@@ -10,7 +10,7 @@ A Rust implementation of the BEST matching algorithm.
 * Get the code
 
 ```sh
-git pull
+git clone ...
 cd rust-matching
 ```
 
