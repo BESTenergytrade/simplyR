@@ -37,7 +37,7 @@ struct Match {
     price_euro_per_kwh: f64,
 }
 
-/// The market input contains all matches of a time slot.
+/// The market output contains all matches of a time slot.
 #[derive(Clone, Debug, Serialize, Deserialize)]
 struct MarketOutput {
     matches: Vec<Match>,
