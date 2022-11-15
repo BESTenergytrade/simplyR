@@ -1,3 +1,7 @@
+use std::env;
+use std::fs::File;
+use std::io::BufReader;
+
 use serde::{Deserialize, Serialize};
 
 /// Smallest energy value (in kWh) that is used for a match.
@@ -96,7 +100,7 @@ fn pay_as_bid_matching(input: &MarketInput) -> MarketOutput {
     MarketOutput { matches }
 }
 
-fn main() {
+fn example_code() {
     // Create some orders
     let order_1 = Order {
         id: 1,
@@ -134,6 +138,37 @@ fn main() {
     // Match
     let market_output = pay_as_bid_matching(&market_input);
     println!("Matched:\n\n{:#?}", market_output);
+}
+
+fn print_usage() {
+    println!(
+        "Take orders from a JSON file and print matches as JSON\n\n\
+    Usage:
+      cargo run -- example_market_input.json
+
+      or
+
+      cargo build --release
+      target/release/rust-matching example_market_input.json
+    "
+    );
+}
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let args: Vec<String> = env::args().collect();
+    if args.len() == 2 {
+        // first commandline argument is json file path
+        let file = File::open(&args[1])?;
+        let reader = BufReader::new(file);
+        let market_input: MarketInput = serde_json::from_reader(reader)?;
+        let market_output = pay_as_bid_matching(&market_input);
+        let market_output_json = serde_json::to_string_pretty(&market_output).unwrap();
+        println!("{}", market_output_json);
+    } else {
+        print_usage();
+    }
+
+    Ok(())
 }
 
 #[cfg(test)]
