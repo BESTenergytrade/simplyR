@@ -7,6 +7,10 @@ use serde::{Deserialize, Serialize};
 /// Smallest energy value (in kWh) that is used for a match.
 const ENERGY_EPS: f64 = 0.001;
 
+fn round_energy_value(energy: f64) -> f64 {
+    (energy * 1000.0).round() / 1000.0
+}
+
 #[derive(Copy, Clone, Debug, Serialize, Deserialize, PartialEq)]
 enum OrderType {
     #[serde(rename = "bid")]
@@ -78,19 +82,19 @@ fn pay_as_bid_matching(input: &MarketInput) -> MarketOutput {
 
     // match
     for bid in &bids {
-        let mut left_energy = bid.energy_kwh;
+        let mut remaining_energy = bid.energy_kwh;
         for ask in asks.iter_mut() {
             if (bid.price_euro_per_kwh >= ask.price_euro_per_kwh) && (ask.energy_kwh > ENERGY_EPS) {
-                let matched_energy = ask.energy_kwh.min(left_energy);
+                let matched_energy = ask.energy_kwh.min(remaining_energy);
                 matches.push(Match {
                     bid_id: bid.id,
                     ask_id: ask.id,
-                    energy_kwh: matched_energy,
+                    energy_kwh: round_energy_value(matched_energy),
                     price_euro_per_kwh: bid.price_euro_per_kwh,
                 });
                 ask.energy_kwh -= matched_energy;
-                left_energy -= matched_energy;
-                if left_energy < ENERGY_EPS {
+                remaining_energy -= matched_energy;
+                if remaining_energy < ENERGY_EPS {
                     break;
                 }
             }
