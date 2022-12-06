@@ -4,6 +4,7 @@ use std::io::BufReader;
 
 use rust_matching_lib::{pay_as_bid_matching, MarketInput, Order, OrderType};
 
+#[allow(dead_code)]
 fn example_code() {
     // Create some orders
     let order_1 = Order {
