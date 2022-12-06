@@ -2,6 +2,7 @@
 
 A Rust implementation of the BEST matching algorithm.
 
+[![CI](https://github.com/BESTenergytrade/rust-matching/actions/workflows/ci.yml/badge.svg)](https://github.com/BESTenergytrade/rust-matching/actions/workflows/ci.yml)
 
 ## Installation
 
