@@ -30,6 +30,15 @@ dependencies = [
 name = "rust-matching"
 version = "0.1.0"
 dependencies = [
+ "rust-matching-lib",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "rust-matching-lib"
+version = "0.1.0"
+dependencies = [
  "serde",
  "serde_json",
 ]
