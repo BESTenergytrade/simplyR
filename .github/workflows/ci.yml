@@ -33,7 +33,6 @@ jobs:
     strategy:
       matrix:
         rust_version: ["stable", "1.60.0"]
-    runs-on: "${{ matrix.runs_on }}"
     steps:
       - uses: actions/checkout@v3
       - name: Install Rust
