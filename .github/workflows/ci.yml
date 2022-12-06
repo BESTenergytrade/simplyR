@@ -33,6 +33,7 @@ jobs:
     strategy:
       matrix:
         rust_version: ["stable", "1.60.0"]
+    runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v3
       - name: Install Rust
