@@ -310,16 +310,19 @@ pub fn custom_fair_matching(
             None => break,
         };
 
+        // local bids
         let fair_bids: Vec<_> = get_fair_orders(input, energy_unit_kwh, |x| {
             x.order_type == OrderType::Bid && x.cluster_index == Some(cluster_idx)
         });
 
         if fair_bids.is_empty() {
+            // Nothing to do in this cluster
             continue;
         }
 
         let exclude_set = &exclude[&cluster_idx];
 
+        // Get all asks that are not excluded and set the adjusted price (price + grid fee)
         let fair_asks: Vec<_> = {
             let mut asks = get_fair_orders(input, energy_unit_kwh, |x| {
                 x.order_type == OrderType::Ask && !exclude_set.contains(&x.id)
