@@ -1,8 +1,8 @@
-# rust-matching
+# simplyR
 
 A Rust implementation of the BEST matching algorithm.
 
-[![CI](https://github.com/BESTenergytrade/rust-matching/actions/workflows/ci.yml/badge.svg)](https://github.com/BESTenergytrade/rust-matching/actions/workflows/ci.yml)
+[![CI](https://github.com/BESTenergytrade/simplyR/actions/workflows/ci.yml/badge.svg)](https://github.com/BESTenergytrade/simplyR/actions/workflows/ci.yml)
 
 ## Installation
 
@@ -12,13 +12,13 @@ A Rust implementation of the BEST matching algorithm.
 sudo apt install git build-essential
 ```
 
-* Install the latest stable version of Rust, e.g. via <https://rustup.rs/>
+* Install the latest stable version of Rust (at least version 1.66.0), e.g. via <https://rustup.rs/>
 
 * Get the code
 
 ```sh
 git clone ...
-cd rust-matching
+cd simplyR
 ```
 
 * Compile, run
@@ -42,7 +42,7 @@ You can either compile the program and access the binary directly (it's in the
 
 ```sh
 cargo build --release
-target/release/rust-matching example_market_input.json
+target/release/simplyr example_market_input.json
 ```
 
 Or you can compile and run in one invocation:

@@ -2,7 +2,7 @@ use std::env;
 use std::fs::File;
 use std::io::BufReader;
 
-use rust_matching_lib::{custom_fair_matching, pay_as_bid_matching, MarketInput, Order, OrderType};
+use simplyr_lib::{custom_fair_matching, pay_as_bid_matching, MarketInput, Order, OrderType};
 
 #[allow(dead_code)]
 fn example_code() {
@@ -56,7 +56,7 @@ fn print_usage() {
       or
 
       cargo build --release
-      target/release/rust-matching example_market_input.json
+      target/release/simplyr example_market_input.json
     "
     );
 }
