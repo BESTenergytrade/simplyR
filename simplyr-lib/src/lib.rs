@@ -82,7 +82,7 @@ pub struct MarketOutput {
 }
 
 /// This type is only used to interface with JSON and may not be useful in a public interface.
-type GridFeeMatrixRaw = Vec<Vec<f64>>;
+pub type GridFeeMatrixRaw = Vec<Vec<f64>>;
 
 /// The 2D grid matrix is stored as a flat vector for efficient lookup and less allocations.
 /// The code avoids the words `column`, `row`, `x`, `y` because the struct represents a mapping
@@ -121,7 +121,7 @@ impl GridFeeMatrix {
     }
 
     /// Create a `GridFeeMatrix` from a `GridFeeMatrixRaw`.
-    fn from_raw(raw: &GridFeeMatrixRaw) -> Result<Self, String> {
+    pub fn from_raw(raw: &GridFeeMatrixRaw) -> Result<Self, String> {
         let size = raw.len();
         let mut flat_matrix = vec![0.0; size * size];
         for (source_cluster_idx, vec_a) in raw.iter().enumerate() {
