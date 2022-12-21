@@ -200,11 +200,10 @@ pub fn pay_as_bid_matching(input: &MarketInput) -> MarketOutput {
 }
 
 struct FairMatchingOrder {
-    pub orig_id: u64,
-    pub order_type: OrderType,
-    pub cluster_index: usize,
-    pub price_euro_per_kwh: f64,
-    pub adjusted_price: f64,
+    orig_id: u64,
+    cluster_index: usize,
+    price_euro_per_kwh: f64,
+    adjusted_price: f64,
 }
 
 /// An implementation of our custom BEST matching algorithm.
@@ -284,7 +283,6 @@ pub fn custom_fair_matching(
             for _ in 0..num_entries {
                 forders.push(FairMatchingOrder {
                     orig_id: order.id,
-                    order_type: order.order_type,
                     cluster_index: order.cluster_index.unwrap(),
                     price_euro_per_kwh: order.price_euro_per_kwh,
                     adjusted_price: f64::NAN,
@@ -311,7 +309,7 @@ pub fn custom_fair_matching(
         };
 
         // local bids
-        let fair_bids: Vec<_> = get_fair_orders(input, energy_unit_kwh, |x| {
+        let mut fair_bids: Vec<_> = get_fair_orders(input, energy_unit_kwh, |x| {
             x.order_type == OrderType::Bid && x.cluster_index == Some(cluster_idx)
         });
 
@@ -323,7 +321,7 @@ pub fn custom_fair_matching(
         let exclude_set = &exclude[&cluster_idx];
 
         // Get all asks that are not excluded and set the adjusted price (price + grid fee)
-        let fair_asks: Vec<_> = {
+        let mut fair_asks: Vec<_> = {
             let mut asks = get_fair_orders(input, energy_unit_kwh, |x| {
                 x.order_type == OrderType::Ask && !exclude_set.contains(&x.id)
             });
@@ -333,6 +331,42 @@ pub fn custom_fair_matching(
             }
             asks
         };
+
+        // Sort by price, descending
+        fair_bids.sort_by(|a, b| {
+            a.price_euro_per_kwh
+                .total_cmp(&b.price_euro_per_kwh)
+                .reverse()
+        });
+        // Sort by adjusted price, ascending, then by price, descending
+        fair_asks.sort_by(|a, b| {
+            a.adjusted_price.total_cmp(&b.adjusted_price).then(
+                a.price_euro_per_kwh
+                    .total_cmp(&b.price_euro_per_kwh)
+                    .reverse(),
+            )
+        });
+
+        {
+            let mut _matches = vec![];
+            let mut bids_iter = fair_bids.iter();
+            let bid = bids_iter.next();
+
+            for ask in fair_asks {
+                if let Some(bid) = bid {
+                    if ask.adjusted_price <= bid.price_euro_per_kwh {
+                        _matches.push(Match {
+                            bid_id: bid.orig_id,
+                            ask_id: ask.orig_id,
+                            energy_kwh: energy_unit_kwh,
+                            price_euro_per_kwh: ask.adjusted_price,
+                        });
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
 
         //TODO ...
     }
