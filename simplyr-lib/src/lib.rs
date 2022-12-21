@@ -298,7 +298,8 @@ pub fn custom_fair_matching(
     let mut clusters_to_match: BTreeSet<usize> = BTreeSet::from_iter(0..grid_fee_matrix.size);
 
     // Map from cluster index -> set of order indices
-    let mut exclude: BTreeMap<usize, BTreeSet<u64>> =
+    // TODO: Add `mut` again, so exclude can actually be used
+    let exclude: BTreeMap<usize, BTreeSet<u64>> =
         BTreeMap::from_iter((0..grid_fee_matrix.size).map(|x| (x, BTreeSet::new())));
 
     loop {
