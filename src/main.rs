@@ -16,8 +16,8 @@ enum Algorithm {
 #[derive(Parser, Clone, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    /// What matching algorithm to run
-    #[arg(short, long)]
+    /// Which matching algorithm to run
+    #[arg(short, long, value_name = "NAME")]
     algo: Algorithm,
 
     /// Sets a the JSON file that includes the orders
@@ -43,8 +43,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let market_input: MarketInput = serde_json::from_reader(reader)?;
             {
                 let market_output = pay_as_bid_matching(&market_input);
-                let market_output_json = serde_json::to_string_pretty(&market_output)?;
-                println!("\n{}", market_output_json);
+                let mut stdout = std::io::stdout();
+                serde_json::to_writer_pretty(&mut stdout, &market_output)?;
             }
         }
         Algorithm::CustomFair => {
@@ -55,7 +55,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             };
 
             let grid_fee_matrix: GridFeeMatrix = {
-                let file = File::open(&args.grid_fee_matrix.unwrap())?;
+                let file = File::open(args.grid_fee_matrix.unwrap())?;
                 let reader = BufReader::new(file);
                 let raw: GridFeeMatrixRaw = serde_json::from_reader(reader)?;
                 GridFeeMatrix::from_raw(&raw)?
@@ -67,8 +67,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     args.energy_unit.unwrap_or(1.0),
                     &grid_fee_matrix,
                 );
-                let market_output_json = serde_json::to_string_pretty(&market_output)?;
-                println!("\n{}", market_output_json);
+                let mut stdout = std::io::stdout();
+                serde_json::to_writer_pretty(&mut stdout, &market_output)?;
             }
         }
     }
