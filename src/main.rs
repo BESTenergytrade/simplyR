@@ -1,6 +1,6 @@
 use clap::{Parser, ValueEnum};
 use simplyr_lib::{
-    custom_fair_matching, pay_as_bid_matching, GridFeeMatrix, GridFeeMatrixRaw, MarketInput
+    custom_fair_matching, pay_as_bid_matching, GridFeeMatrix, GridFeeMatrixRaw, MarketInput,
 };
 use std::fs::File;
 use std::io::BufReader;
