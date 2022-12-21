@@ -36,7 +36,7 @@ cargo build --release
 
 The binary is located in the `target` directory:
 
-* `target/release/simplyr` for relase builds
+* `target/release/simplyr` for release builds
 * `target/debug/simplyr` for debug builds
 
 ```sh
@@ -47,6 +47,9 @@ cargo run --release -- -h
 ```
 
 ```sh
+# Don't forget to compile first
+cargo build --release
+
 # Test pay-as-bid with example files
 target/release/simplyr -a pay-as-bid -o example_market_input.json
 
