@@ -1,3 +1,9 @@
+#![no_std]
+
+extern crate alloc;
+use crate::alloc::string::ToString;
+use alloc::vec;
+
 pub use simplyr_lib::MarketOutput;
 use simplyr_lib::{
 	custom_fair_matching, pay_as_bid_matching, GridFeeMatrix, MarketInput, Order, OrderType,
@@ -8,8 +14,8 @@ pub fn pay_as_bid() -> MarketOutput {
 	let order_1 = Order {
 		id: 1,
 		order_type: OrderType::Ask,
-		time_slot: "2022-03-04T05:06:07+00:00".to_string(),
-		actor_id: "actor_1".to_string(),
+		time_slot: ("2022-03-04T05:06:07+00:00").to_string(),
+		actor_id: ("actor_1").to_string(),
 		cluster_index: Some(0),
 		energy_kwh: 2.0,
 		price_euro_per_kwh: 0.3,
@@ -18,8 +24,8 @@ pub fn pay_as_bid() -> MarketOutput {
 	let order_2 = Order {
 		id: 2,
 		order_type: OrderType::Bid,
-		time_slot: "2022-03-04T05:06:07+00:00".to_string(),
-		actor_id: "actor_2".to_string(),
+		time_slot: ("2022-03-04T05:06:07+00:00").to_string(),
+		actor_id: ("actor_2").to_string(),
 		cluster_index: Some(0),
 		energy_kwh: 1.5,
 		price_euro_per_kwh: 0.35,
@@ -38,8 +44,8 @@ pub fn custom_fair() -> MarketOutput {
 	let order_1 = Order {
 		id: 1,
 		order_type: OrderType::Ask,
-		time_slot: "2022-03-04T05:06:07+00:00".to_string(),
-		actor_id: "actor_1".to_string(),
+		time_slot: ("2022-03-04T05:06:07+00:00").to_string(),
+		actor_id: ("actor_1").to_string(),
 		cluster_index: Some(0),
 		energy_kwh: 2.0,
 		price_euro_per_kwh: 0.3,
@@ -48,8 +54,8 @@ pub fn custom_fair() -> MarketOutput {
 	let order_2 = Order {
 		id: 2,
 		order_type: OrderType::Bid,
-		time_slot: "2022-03-04T05:06:07+00:00".to_string(),
-		actor_id: "actor_2".to_string(),
+		time_slot: ("2022-03-04T05:06:07+00:00").to_string(),
+		actor_id: ("actor_2").to_string(),
 		cluster_index: Some(0),
 		energy_kwh: 1.5,
 		price_euro_per_kwh: 0.35,
