@@ -27,7 +27,7 @@ use serde::{Deserialize, Serialize};
 const ENERGY_EPS: f64 = 0.001;
 
 fn round_energy_value(energy: f64) -> f64 {
-    (energy * 1000.0).round() / 1000.0
+    (energy * 1000.0) / 1000.0
 }
 
 /// A enumeration of the two possible order types.
@@ -277,7 +277,7 @@ pub fn custom_fair_matching(
                 && order.cluster_index.is_some()
                 && filter_fn(order)
         }) {
-            let num_entries = (order.energy_kwh / energy_unit_kwh).trunc() as usize;
+            let num_entries = ((order.energy_kwh / energy_unit_kwh) as i32) as usize;
             forders.reserve(num_entries);
             // Create multiple entries - one for each full energy unit
             for _ in 0..num_entries {
