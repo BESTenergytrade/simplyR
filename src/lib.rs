@@ -6,13 +6,14 @@
 //! make deployment in constrained environments (like a secure enclave) easier. We are allowed to
 //! use the `alloc` crate, so the consequences of this are less drastic.
 
+use codec::{Decode, Encode};
+
 extern crate alloc;
+extern crate libm;
 
 // Since we are in no_std land we have to be import items that might allocate memory explicitly.
 use crate::alloc::string::ToString;
-use alloc::string::String;
-use alloc::vec;
-use alloc::vec::Vec;
+use alloc::{string::String, vec, vec::Vec};
 // We use this instead of [`HashMap`] in `no_std` because we don't have access to a secure source
 // of random numbers to avoid hash collision attacks.
 use alloc::collections::btree_map::BTreeMap;
@@ -27,7 +28,7 @@ use serde::{Deserialize, Serialize};
 const ENERGY_EPS: f64 = 0.001;
 
 fn round_energy_value(energy: f64) -> f64 {
-    (energy * 1000.0).round() / 1000.0
+    libm::round(energy * 1000.0) / 1000.0
 }
 
 /// A enumeration of the two possible order types.
@@ -63,7 +64,7 @@ pub struct MarketInput {
 }
 
 /// A match between a bid and an ask.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, Encode, Decode)]
 pub struct Match {
     /// The order ID of the bid
     pub bid_id: u64,
@@ -76,7 +77,7 @@ pub struct Match {
 }
 
 /// The market output contains all matches of a time slot.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, Encode, Decode)]
 pub struct MarketOutput {
     pub matches: Vec<Match>,
 }
@@ -277,7 +278,7 @@ pub fn custom_fair_matching(
                 && order.cluster_index.is_some()
                 && filter_fn(order)
         }) {
-            let num_entries = (order.energy_kwh / energy_unit_kwh).trunc() as usize;
+            let num_entries = libm::trunc(order.energy_kwh / energy_unit_kwh) as usize;
             forders.reserve(num_entries);
             // Create multiple entries - one for each full energy unit
             for _ in 0..num_entries {
