@@ -278,7 +278,7 @@ pub fn custom_fair_matching(
                 && order.cluster_index.is_some()
                 && filter_fn(order)
         }) {
-            let num_entries = ((order.energy_kwh / energy_unit_kwh) as i32) as usize;
+            let num_entries = libm::trunc(order.energy_kwh / energy_unit_kwh) as usize;
             forders.reserve(num_entries);
             // Create multiple entries - one for each full energy unit
             for _ in 0..num_entries {
