@@ -9,6 +9,7 @@
 use codec::{Decode, Encode};
 
 extern crate alloc;
+extern crate libm;
 
 // Since we are in no_std land we have to be import items that might allocate memory explicitly.
 use crate::alloc::string::ToString;
@@ -27,7 +28,7 @@ use serde::{Deserialize, Serialize};
 const ENERGY_EPS: f64 = 0.001;
 
 fn round_energy_value(energy: f64) -> f64 {
-    (energy * 1000.0) / 1000.0
+    libm::round(energy * 1000.0) / 1000.0
 }
 
 /// A enumeration of the two possible order types.
