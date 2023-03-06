@@ -1,0 +1,3 @@
+[submodule "simplyr-lib"]
+	path = simplyr-lib
+	url = https://github.com/BESTenergytrade/simplyr-lib.git
